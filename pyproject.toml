@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mp3_tag_folders"
-version = "0.1.0"
+version = "1.0.0"
 description = "A Python script to update MP3 album tags based on folder names"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
