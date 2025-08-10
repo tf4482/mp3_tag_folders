@@ -54,10 +54,10 @@ def update_mp3_album(file_path: Path, album_tag: str) -> bool:
             audio.save()
             return True
         except Exception as e:
-            colored_print(f"Failed to create ID3 tags for {file_path}: {e}", Fore.RED)
+            colored_print(f"❌ Failed to create ID3 tags for {file_path}: {e}", Fore.RED)
             return False
     except Exception as e:
-        colored_print(f"Failed to update album tag for {file_path}: {e}", Fore.RED)
+        colored_print(f"❌ Failed to update album tag for {file_path}: {e}", Fore.RED)
         return False
 
 
@@ -70,7 +70,7 @@ def find_mp3_files(directory: Path) -> List[Path]:
             if file_path.is_file() and file_path.suffix.lower() == '.mp3':
                 mp3_files.append(file_path)
     except PermissionError:
-        colored_print(f"Permission denied accessing directory: {directory}", Fore.RED)
+        colored_print(f"🚫 Permission denied accessing directory: {directory}", Fore.RED)
 
     return mp3_files
 
@@ -80,7 +80,7 @@ def update_album_tags(folder: Path) -> None:
     Update album tags for all MP3 files in folder and recursively process subdirectories
     """
     if not folder.exists() or not folder.is_dir():
-        colored_print(f"Directory not found: {folder}", Fore.RED)
+        colored_print(f"📁❌ Directory not found: {folder}", Fore.RED)
         return
 
     # Get album name from folder name
@@ -92,17 +92,19 @@ def update_album_tags(folder: Path) -> None:
 
     for mp3_file in mp3_files:
         success = update_mp3_album(mp3_file, album_tag)
-        if not success:
-            colored_print(f"Failed to update album tag for {mp3_file}", Fore.RED)
+        if success:
+            colored_print(f"🎵 Updated album tag for {mp3_file.name} → '{album_tag}'", Fore.CYAN)
+        else:
+            colored_print(f"❌ Failed to update album tag for {mp3_file}", Fore.RED)
 
     # Process subdirectories recursively
     try:
         subdirectories = [d for d in folder.iterdir() if d.is_dir()]
         for subfolder in subdirectories:
             update_album_tags(subfolder)
-            colored_print(f"Album tagging for {folder}/{subfolder.name} done.", Fore.GREEN)
+            colored_print(f"✅ Album tagging for {folder}/{subfolder.name} done.", Fore.GREEN)
     except PermissionError:
-        colored_print(f"Permission denied accessing subdirectories in: {folder}", Fore.RED)
+        colored_print(f"🚫 Permission denied accessing subdirectories in: {folder}", Fore.RED)
 
 
 def main():
@@ -133,7 +135,7 @@ Examples:
     args = parser.parse_args()
 
     if not args.directories:
-        colored_print(f"Usage: {sys.argv[0]} <directory1> [<directory2> ...]", Fore.YELLOW)
+        colored_print(f"ℹ️ Usage: {sys.argv[0]} <directory1> [<directory2> ...]", Fore.YELLOW)
         sys.exit(1)
 
     # Process each target directory
@@ -141,16 +143,16 @@ Examples:
         target_path = Path(target_directory).resolve()
 
         if not target_path.exists():
-            colored_print(f"Error: Directory '{target_directory}' not found.", Fore.RED)
+            colored_print(f"❌ Error: Directory '{target_directory}' not found.", Fore.RED)
             continue
 
         if not target_path.is_dir():
-            colored_print(f"Error: '{target_directory}' is not a directory.", Fore.RED)
+            colored_print(f"❌ Error: '{target_directory}' is not a directory.", Fore.RED)
             continue
 
-        colored_print(f"Processing directory: {target_path}", Fore.YELLOW)
+        colored_print(f"🔄 Processing directory: {target_path}", Fore.YELLOW)
         update_album_tags(target_path)
-        colored_print(f"All MP3 files in '{target_directory}' and its subdirectories have been updated.", Fore.MAGENTA)
+        colored_print(f"🎵✨ All MP3 files in '{target_directory}' and its subdirectories have been updated.", Fore.MAGENTA)
 
 
 if __name__ == "__main__":
