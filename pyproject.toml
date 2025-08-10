@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "mp3_tag_folders"
+version = "0.1.0"
+description = "A Python script to update MP3 album tags based on folder names"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.13"
+mutagen = "^1.47.0"
+colorama = "^0.4.6"
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.0.0"
+
+[tool.poetry.scripts]
+mp3_tag_folders = "mp3_tag_folders:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
