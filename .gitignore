@@ -9,7 +9,6 @@
 /node_modules
 /dist
 /build
-/test_music
 /.vscode
 /.phpunit.cache
 /.old
@@ -17,6 +16,7 @@
 /.history
 /.fleet
 /.phpunit.cache
+/test_downloads
 files/*
 !files/*example*
 *spec
@@ -54,3 +54,4 @@ ansible.cfg
 .notes*
 acst-dl-config.json
 local_install.bash
+notes.txt
