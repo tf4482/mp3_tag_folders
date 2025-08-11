@@ -9,6 +9,7 @@ MP3 Tag Folders is a user-friendly command-line tool that scans MP3 files in dir
 ## ✨ Features
 
 - 🎵 **Automatic album tag updates** based on folder names
+- ⚡ **Smart tag comparison** - skips files where tags are already correct
 - 🔄 **Recursive processing** of subdirectories
 - 🎨 **Colorful console output** with meaningful emojis
 - 🧹 **Smart name cleaning** (removes punctuation, normalizes whitespace)
@@ -73,7 +74,8 @@ mp3_tag_folders .
 ```
 🔄 Processing directory: /home/user/Music/My Album
 🎵 Updated album tag for song1.mp3 → 'My Album'
-🎵 Updated album tag for song2.mp3 → 'My Album'
+⏭️ Skipped song2.mp3 (album tag already correct: 'My Album')
+🎵 Updated album tag for song3.mp3 → 'My Album'
 ✅ Album tagging for /home/user/Music/My Album/Bonus Tracks done.
 🎵✨ All MP3 files in '/home/user/Music/My Album' and its subdirectories have been updated.
 ```
@@ -82,16 +84,18 @@ mp3_tag_folders .
 
 1. **Folder Analysis**: The tool reads the folder name and cleans it by removing punctuation and normalizing whitespace
 2. **MP3 Discovery**: Finds all `.mp3` files in the current directory (non-recursive for files)
-3. **Tag Update**: Updates the album tag (TALB) for each MP3 file using the cleaned folder name
-4. **Recursive Processing**: Processes all subdirectories recursively
-5. **Progress Reporting**: Provides real-time feedback with colorful emoji indicators
+3. **Tag Comparison**: Checks if the current album tag already matches the target value
+4. **Smart Update**: Only writes tags when changes are actually needed, improving performance
+5. **Recursive Processing**: Processes all subdirectories recursively
+6. **Progress Reporting**: Provides real-time feedback with colorful emoji indicators
 
 ## 📊 Status Indicators
 
 The tool uses various emojis to indicate different states:
 
 - 🔄 **Processing**: Currently working on a directory
-- 🎵 **Success**: Successfully updated an MP3 file's album tag
+- 🎵 **Updated**: Successfully updated an MP3 file's album tag
+- ⏭️ **Skipped**: File skipped because album tag is already correct
 - ✅ **Complete**: Finished processing a subdirectory
 - ❌ **Error**: Failed to update a file or access a directory
 - 🚫 **Permission**: Permission denied errors
