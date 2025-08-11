@@ -35,30 +35,48 @@ def clean_album_name(album_name: str) -> str:
     return cleaned
 
 
-def update_mp3_album(file_path: Path, album_tag: str) -> bool:
-    """Update album tag for MP3 file using mutagen"""
+def update_mp3_album(file_path: Path, album_tag: str) -> tuple[bool, str]:
+    """
+    Update album tag for MP3 file using mutagen
+    Returns (success, status) where status is 'updated', 'unchanged', or 'failed'
+    """
     try:
         audio = MP3(file_path)
         if audio.tags is None:
             audio.add_tags()
+            # New tags, so definitely needs an update
+            audio.tags.add(TALB(encoding=3, text=album_tag))
+            audio.save()
+            return True, 'updated'
 
+        # Check current album tag
+        current_album = None
+        if 'TALB' in audio.tags:
+            current_album = str(audio.tags['TALB'].text[0]) if audio.tags['TALB'].text else None
+
+        # Compare current tag with new tag
+        if current_album == album_tag:
+            return True, 'unchanged'
+
+        # Tag has changed, update needed
         audio.tags.add(TALB(encoding=3, text=album_tag))
         audio.save()
-        return True
+        return True, 'updated'
+
     except ID3NoHeaderError:
-        # Datei hat keine ID3-Tags, erstelle neue
+        # File has no ID3 tags, create new ones
         try:
             audio = MP3(file_path)
             audio.add_tags()
             audio.tags.add(TALB(encoding=3, text=album_tag))
             audio.save()
-            return True
+            return True, 'updated'
         except Exception as e:
             colored_print(f"❌ Failed to create ID3 tags for {file_path}: {e}", Fore.RED)
-            return False
+            return False, 'failed'
     except Exception as e:
         colored_print(f"❌ Failed to update album tag for {file_path}: {e}", Fore.RED)
-        return False
+        return False, 'failed'
 
 
 def find_mp3_files(directory: Path) -> List[Path]:
@@ -91,9 +109,12 @@ def update_album_tags(folder: Path) -> None:
     mp3_files = find_mp3_files(folder)
 
     for mp3_file in mp3_files:
-        success = update_mp3_album(mp3_file, album_tag)
+        success, status = update_mp3_album(mp3_file, album_tag)
         if success:
-            colored_print(f"🎵 Updated album tag for {mp3_file.name} → '{album_tag}'", Fore.CYAN)
+            if status == 'updated':
+                colored_print(f"🎵 Updated album tag for {mp3_file.name} → '{album_tag}'", Fore.CYAN)
+            elif status == 'unchanged':
+                colored_print(f"⏭️ Skipped {mp3_file.name} (album tag already correct: '{album_tag}')", Fore.YELLOW)
         else:
             colored_print(f"❌ Failed to update album tag for {mp3_file}", Fore.RED)
 
