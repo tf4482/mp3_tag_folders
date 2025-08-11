@@ -17,6 +17,7 @@
 /.fleet
 /.phpunit.cache
 /test_downloads
+/test_music
 files/*
 !files/*example*
 *spec
