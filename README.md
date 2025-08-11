@@ -1,10 +1,6 @@
 # 🎵 MP3 Tag Folders
 
-A Python tool for automatically updating MP3 album tags based on folder names.
-
-## 📋 Description
-
-MP3 Tag Folders is a user-friendly command-line tool that scans MP3 files in directories and automatically updates their album tags based on the folder name. The tool works recursively through subdirectories and provides colorful output with emojis for better user experience.
+A Python tool for automatically updating MP3 album tags based on folder names. The tool works recursively through subdirectories and provides colorful output with emojis for better user experience.
 
 ## ✨ Features
 
@@ -134,15 +130,6 @@ mp3_tag_folders --help          # Show help message
 mp3_tag_folders --version       # Show version information
 mp3_tag_folders <directories>   # Process specified directories
 ```
-
-## 🐛 Error Handling
-
-The tool gracefully handles various error conditions:
-
-- **Permission errors**: Skips inaccessible directories with clear error messages
-- **Invalid MP3 files**: Reports files that cannot be processed
-- **Missing ID3 tags**: Automatically creates new ID3 tags when needed
-- **Non-existent directories**: Validates directory existence before processing
 
 ## 📄 License
 
