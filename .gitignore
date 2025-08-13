@@ -38,6 +38,7 @@ files/*
 .env
 .editorconfig
 .box_pc
+.pytest_cache
 yarn-error.log
 push.bat
 password.*
